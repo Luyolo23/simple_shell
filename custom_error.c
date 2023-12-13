@@ -18,21 +18,21 @@ custom_strcpy(custom_error, custom_data->custom_arg_name);
 custom_strcat(custom_error, ": ");
 custom_strcat(custom_error, custom_ver_str);
 custom_strcat(custom_error, ": ");
-custom_strcat(custom_error, custom_data->custom_args[0]);
+custom_strcat(custom_error, custom_data->custom_arg_name[0]);
 custom_strcat(custom_error, custom_msg);
 
-if (custom_data->custom_args[1][0] == '-')
+if (custom_data->custom_arg_name[1][0] == '-')
 {
 custom_illegal_flag = malloc(3);
 custom_illegal_flag[0] = '-';
-custom_illegal_flag[1] = custom_data->custom_args[1][1];
+custom_illegal_flag[1] = custom_data->custom_arg_name[1][1];
 custom_illegal_flag[2] = '\0';
 custom_strcat(custom_error, custom_illegal_flag);
 free(custom_illegal_flag);
 }
 else
 {
-custom_strcat(custom_error, custom_data->custom_args[1]);
+custom_strcat(custom_error, custom_data->custom_arg_name[1]);
 }
 
 custom_strcat(custom_error, "\n");
@@ -51,7 +51,7 @@ int custom_length, custom_len_id;
 char *custom_error, *custom_ver_str, *custom_msg;
 
 custom_ver_str = custom_aux_itoa(custom_data->custom_counter);
-if (custom_data->custom_args[1][0] == '-')
+if (custom_data->custom_arg_name[1][0] == '-')
 {
 custom_msg = ": Illegal option ";
 custom_len_id = 2;
@@ -59,11 +59,11 @@ custom_len_id = 2;
 else
 {
 custom_msg = ": can't cd to ";
-custom_len_id = custom_strlen(custom_data->custom_args[1]);
+custom_len_id = custom_strlen(custom_data->custom_arg_name[1]);
 }
 
 custom_length = custom_strlen(custom_data->custom_arg_name) +
-custom_strlen(custom_data->custom_args[0]) +
+custom_strlen(custom_data->custom_arg_name[0]) +
 custom_strlen(custom_ver_str) + custom_strlen(custom_msg) +
 custom_len_id + 5;
 
@@ -97,7 +97,7 @@ char *custom_ver_str;
 custom_ver_str = custom_aux_itoa(custom_data->custom_counter);
 custom_length = custom_strlen(custom_data->custom_arg_name) +
 	custom_strlen(custom_ver_str) +
-	custom_strlen(custom_data->custom_args[0]) + 16;
+	custom_strlen(custom_data->custom_arg_name[0]) + 16;
 custom_error = malloc(sizeof(char) * (custom_length + 1));
 if (custom_error == 0)
 {
@@ -109,7 +109,7 @@ custom_strcpy(custom_error, custom_data->custom_arg_name);
 custom_strcat(custom_error, ": ");
 custom_strcat(custom_error, custom_ver_str);
 custom_strcat(custom_error, ": ");
-custom_strcat(custom_error, custom_data->custom_args[0]);
+custom_strcat(custom_error, custom_data->custom_arg_name[0]);
 custom_strcat(custom_error, ": not found\n");
 custom_strcat(custom_error, "\0");
 free(custom_ver_str);
@@ -131,8 +131,8 @@ char *custom_ver_str;
 custom_ver_str = custom_aux_itoa(custom_data->custom_counter);
 custom_length = custom_strlen(custom_data->custom_arg_name) +
 custom_strlen(custom_ver_str) +
-custom_strlen(custom_data->custom_args[0]) +
-custom_strlen(custom_data->custom_args[1]) + 23;
+custom_strlen(custom_data->custom_arg_name[0]) +
+custom_strlen(custom_data->custom_arg_name[1]) + 23;
 custom_error = malloc(sizeof(char) * (custom_length + 1));
 if (custom_error == 0)
 {
@@ -143,9 +143,9 @@ custom_strcpy(custom_error, custom_data->custom_arg_name);
 custom_strcat(custom_error, ": ");
 custom_strcat(custom_error, custom_ver_str);
 custom_strcat(custom_error, ": ");
-custom_strcat(custom_error, custom_data->custom_args[0]);
+custom_strcat(custom_error, custom_data->custom_arg_name[0]);
 custom_strcat(custom_error, ": Illegal number: ");
-custom_strcat(custom_error, custom_data->custom_args[1]);
+custom_strcat(custom_error, custom_data->custom_arg_name[1]);
 custom_strcat(custom_error, "\n\0");
 free(custom_ver_str);
 

@@ -6,7 +6,7 @@
  * @eval: error value
  * Return: error
  */
-int get_error(data_shell *custom_data, int eval)
+int get_error(custom_shell_data *custom_data, int eval)
 {
 char *error;
 
@@ -23,7 +23,7 @@ error = custom_error_not_found(custom_data);
 break;
 case 2:
 if (_strcmp("exit", custom_data->args[0]) == 0)
-error = error_exit_shell(custom_data);
+error = custom_error_exit_shell(custom_data);
 else if (_strcmp("cd", custom_data->args[0]) == 0)
 error = custom_error_get_cd(custom_data);
 break;

@@ -5,7 +5,7 @@
  * @data: data relevant
  * Return: 1 on success
  */
-int cd_shell(shell_data *data)
+int cd_shell(custom_shell_data *data)
 {
 char *dir;
 int is_home, is_home2, is_ddash;

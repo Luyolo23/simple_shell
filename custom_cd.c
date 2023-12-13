@@ -7,19 +7,19 @@
  *
  * Return: no return
  */
-void cd_parent(shell_data *data)
+void cd_parent(custom_shell_data *data)
 {
 char pwd[PATH_MAX];
 char *dir, *cp_pwd, *cp_strtok_pwd;
 
 getcwd(pwd, sizeof(pwd));
 cp_pwd = _strdup(pwd);
-set_env("OLDPWD", cp_pwd, data);
+set_variable("OLDPWD", cp_pwd, data);
 dir = data->args[1];
 
 if (_strcmp(".", dir) == 0)
 {
-set_env("PWD", cp_pwd, data);
+set_variable("PWD", cp_pwd, data);
 free(cp_pwd);
 return;
 }
@@ -45,12 +45,12 @@ rev_string(cp_strtok_pwd);
 if (cp_strtok_pwd != NULL)
 {
 chdir(cp_strtok_pwd);
-set_env("PWD", cp_strtok_pwd, data);
+set_variable("PWD", cp_strtok_pwd, data);
 }
 else
 {
 chdir("/");
-set_env("PWD", "/", data);
+set_variable("PWD", "/", data);
 }
 
 data->status = 0;
@@ -62,7 +62,7 @@ free(cp_pwd);
  * @data: shell data (directories)
  * Return: no return
  */
-void cd_to_dir(shell_data *data)
+void cd_to_dir(custom_shell_data *data)
 {
 char pwd[PATH_MAX];
 char *dir, *cp_pwd, *cp_dir;
@@ -77,10 +77,10 @@ return;
 }
 
 cp_pwd = _strdup(pwd);
-set_env("OLDPWD", cp_pwd, data);
+set_variable("OLDPWD", cp_pwd, data);
 
 cp_dir = _strdup(dir);
-set_env("PWD", cp_dir, data);
+set_variable("PWD", cp_dir, data);
 
 free(cp_pwd);
 free(cp_dir);
@@ -96,7 +96,7 @@ chdir(dir);
  * @data: shell data (environ)
  * Return: no return
  */
-void cd_prev(shell_data *data)
+void cd_prev(custom_shell_data *data)
 {
 char pwd[PATH_MAX];
 char *p_pwd, *p_oldpwd, *cp_pwd, *cp_oldpwd;
@@ -104,21 +104,21 @@ char *p_pwd, *p_oldpwd, *cp_pwd, *cp_oldpwd;
 getcwd(pwd, sizeof(pwd));
 cp_pwd = _strdup(pwd);
 
-p_oldpwd = _getenv("OLDPWD", data->_environ);
+p_oldpwd = get_variable("OLDPWD", data->environment);
 
 if (p_oldpwd == NULL)
 cp_oldpwd = cp_pwd;
 else
 cp_oldpwd = _strdup(p_oldpwd);
 
-set_env("OLDPWD", cp_pwd, data);
+set_variable("OLDPWD", cp_pwd, data);
 
 if (chdir(cp_oldpwd) == -1)
-set_env("PWD", cp_pwd, data);
+set_variable("PWD", cp_pwd, data);
 else
-set_env("PWD", cp_oldpwd, data);
+set_variable("PWD", cp_oldpwd, data);
 
-p_pwd = _getenv("PWD", data->_environ);
+p_pwd = get_variable("PWD", data->environment);
 
 write(STDOUT_FILENO, p_pwd, _strlen(p_pwd));
 write(STDOUT_FILENO, "\n", 1);
@@ -138,7 +138,7 @@ chdir(p_pwd);
  * @data: shell data (environ)
  * Return: no return
  */
-void cd_home(shell_data *data)
+void cd_home(custom_shell_data *data)
 {
 char *p_pwd, *home;
 char pwd[PATH_MAX];
@@ -146,11 +146,11 @@ char pwd[PATH_MAX];
 getcwd(pwd, sizeof(pwd));
 p_pwd = _strdup(pwd);
 
-home = _getenv("HOME", data->_environ);
+home = get_variable("HOME", data->environment);
 
 if (home == NULL)
 {
-set_env("OLDPWD", p_pwd, data);
+set_variable("OLDPWD", p_pwd, data);
 free(p_pwd);
 return;
 }
@@ -162,8 +162,8 @@ free(p_pwd);
 return;
 }
 
-set_env("OLDPWD", p_pwd, data);
-set_env("PWD", home, data);
+set_variable("OLDPWD", p_pwd, data);
+set_variable("PWD", home, data);
 free(p_pwd);
 data->status = 0;
 }

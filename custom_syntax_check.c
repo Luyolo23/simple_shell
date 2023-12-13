@@ -83,7 +83,7 @@ return (0);
  * @bool: control flag
  * Return: no return
  */
-void print_syntax_error_msg(data_shell *datash,
+void print_syntax_error_msg(custom_shell_data *datash,
 		char *input, int index, int bool)
 {
 char *msg, *msg2, *msg3, *error, *counter;
@@ -101,7 +101,7 @@ msg = (input[index + 1] == '&') ? "&&" : "&";
 
 msg2 = ": Syntax error: \"";
 msg3 = "\" unexpected\n";
-counter = aux_itoa(datash->counter);
+counter = int_to_str(datash->counter);
 length = _strlen(datash->av[0]) + _strlen(counter) + _strlen(msg) +
 _strlen(msg2) + _strlen(msg3) + 2;
 
@@ -131,7 +131,7 @@ free(counter);
  * @input: input string
  * Return: 1 if error. 0 otherwise
  */
-int check_syntax_error(data_shell *datash, char *input)
+int check_syntax_error(custom_shell_data *datash, char *input)
 {
 int begin = 0;
 int f_char_result = find_first_char_index(input, &begin);

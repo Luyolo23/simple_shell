@@ -33,7 +33,7 @@ return (new_info);
  * @shell_data: data structure (variables or settings)
  * Return: no return
  */
-void set_variable(char *name, char *value, shell_data *shell_data)
+void set_variable(char *name, char *value, custom_shell_data *shell_data)
 {
 int i;
 char *var_info, *name_info;
@@ -52,7 +52,7 @@ return;
 free(var_info);
 }
 
-shell_data->_variables = _reallocdp
+shell_data->_variables = _reallocate_dp
 (shell_data->_variables, i, sizeof(char *) * (i + 2));
 shell_data->_variables[i] = duplicate_info(name, value);
 shell_data->_variables[i + 1] = NULL;
@@ -64,7 +64,7 @@ shell_data->_variables[i + 1] = NULL;
  *
  * Return: 1 on success.
  */
-int _set_variable(shell_data *shell_data)
+int _set_variable(custom_shell_data *shell_data)
 {
 if (shell_data->args[1] == NULL || shell_data->args[2] == NULL)
 {
@@ -84,7 +84,7 @@ return (1);
  *
  * Return: 1 on success.
  */
-int _unset_variable(shell_data *shell_data)
+int _unset_variable(custom_shell_data *shell_data)
 {
 char **realloc_variables;
 char *var_info, *name_info;

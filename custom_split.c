@@ -62,20 +62,20 @@ input = swap_special_chars(input, 0);
 for (i = 0; input[i]; i++)
 {
 if (input[i] == ';')
-add_sep_node_end(sep_head, input[i]);
+add_separator_node_end(sep_head, input[i]);
 
 if (input[i] == '|' || input[i] == '&')
 {
-add_sep_node_end(sep_head, input[i]);
+add_separator_node_end(sep_head, input[i]);
 i++;
 }
 }
 
-line = custom_strtok(input, ";|&");
+line = _strtok(input, ";|&");
 do {
 line = swap_special_chars(line, 1);
 add_line_node_end(cmd_head, line);
-line = custom_strtok(NULL, ";|&");
+line = _strtok(NULL, ";|&");
 } while (line != NULL);
 }
 
@@ -87,11 +87,12 @@ line = custom_strtok(NULL, ";|&");
  * @data: data structure
  * Return: no return
  */
-void move_to_next(sep_list **sep_list, line_list **cmd_list, data_shell *data)
+void move_to_next(sep_list **sep_list, line_list **cmd_list,
+		custom_shell_data *data)
 {
-int loop_sep;
 sep_list *current_sep;
 line_list *current_cmd;
+int loop_sep;
 
 loop_sep = 1;
 current_sep = *sep_list;
@@ -129,7 +130,7 @@ current_sep = current_sep->next;
  * @input: input string
  * Return: 0 to exit, 1 to continue
  */
-int process_commands(data_shell *data, char *input)
+int process_commands(custom_shell_data *data, char *input)
 {
 
 sep_list *sep_head, *current_sep;
@@ -148,7 +149,7 @@ while (current_cmd != NULL)
 {
 data->input = current_cmd->line;
 data->arguments = split_cmd_line(data->input);
-loop = execute_cmd_line(data);
+loop = exec_line(data);
 free(data->arguments);
 
 if (loop == 0)
@@ -160,7 +161,7 @@ if (current_cmd != NULL)
 current_cmd = current_cmd->next;
 }
 
-free_sep_list(&sep_head);
+free_separator_list(&sep_head);
 free_line_list(&cmd_head);
 
 if (loop == 0)
@@ -169,12 +170,12 @@ return (1);
 }
 
 /**
- * split_line - tokenizes the input string
+ * split_cmd_line - tokenizes the input string
  *
  * @input: input string.
  * Return: string splitted.
  */
-char **split_line(char *input)
+char **split_cmd_line(char *input)
 {
 size_t bsize;
 size_t i;

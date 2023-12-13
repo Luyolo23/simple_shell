@@ -18,7 +18,7 @@ if (n == NULL)
 return (NULL);
 
 n->len_var = len_var;
-n->value = val;
+n->val = val;
 n->len_val = len_val;
 
 n->next = NULL;

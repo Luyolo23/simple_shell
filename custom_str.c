@@ -16,7 +16,7 @@ duplicate_str = malloc(sizeof(char) * (length + 1));
 if (duplicate_str == NULL)
 return (NULL);
 
-_memcpy(duplicate_str, original_str, length + 1);
+_cpy(duplicate_str, original_str, length + 1);
 return (duplicate_str);
 }
 

@@ -55,7 +55,7 @@ return (ptr_var + mov);
  * @shell_data: data relevant.
  * Return: 1 on success.
  */
-int print_variables(shell_data *shell_data)
+int print_variables(custom_shell_data *shell_data)
 {
 int i, j;
 

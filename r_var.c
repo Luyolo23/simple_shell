@@ -8,7 +8,7 @@
  * @data: data structure
  * Return: no return
  */
-void check_env(r_var **list, char *input, data_shell *data)
+void check_env(r_var **list, char *input, custom_shell_data *data)
 {
 int row, chr, j, lval;
 char **env_vars;
@@ -50,7 +50,8 @@ add_var_node(list, j, NULL, 0);
  * @data: data structure
  * Return: no return
  */
-int check_vars(r_var **list, char *input, char *status, data_shell *data)
+int check_vars(r_var **list, char *input, char *status,
+		custom_shell_data *data)
 {
 int i, status_len, pid_len;
 
@@ -110,7 +111,7 @@ else
 {
 for (k = 0; k < current->len_val; k++)
 {
-new_input[i] = current->value[k];
+new_input[i] = current->val[k];
 i++;
 }
 j += (current->len_var);
@@ -135,7 +136,7 @@ return (new_input);
  * @datash: data structure
  * Return: replaced string
  */
-char *replace_variables(char *input, data_shell *datash)
+char *replace_variables(char *input, custom_shell_data *datash)
 {
 r_var *list, *current;
 char *status, *new_input;
@@ -170,7 +171,7 @@ new_input = replaced_input(&list, input, new_input, new_len);
 
 free(input);
 free(status);
-free_var_node(&list);
+free_var_list(&list);
 
 return (new_input);
 }

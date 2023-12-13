@@ -15,7 +15,7 @@ char *custom_msg;
 custom_ver_str = custom_aux_itoa(custom_data->custom_counter);
 custom_msg = ": Unable to add/remove from environment\n";
 length = custom_strlen(custom_data->custom_arg_name) +
-custom_strlen(custom_ver_str) + custom_strlen(custom_data->custom_args[0]) +
+custom_strlen(custom_ver_str) + custom_strlen(custom_data->custom_arg_name[0]) +
 custom_strlen(custom_msg) + 4;
 
 custom_error = malloc(sizeof(char) * (length + 1));
@@ -30,7 +30,7 @@ custom_strcpy(custom_error, custom_data->custom_arg_name);
 custom_strcat(custom_error, ": ");
 custom_strcat(custom_error, custom_ver_str);
 custom_strcat(custom_error, ": ");
-custom_strcat(custom_error, custom_data->custom_args[0]);
+custom_strcat(custom_error, custom_data->custom_arg_name[0]);
 custom_strcat(custom_error, custom_msg);
 custom_strcat(custom_error, "\0");
 free(custom_ver_str);
@@ -54,7 +54,7 @@ char *custom_error;
 custom_ver_str = custom_aux_itoa(custom_data->custom_counter);
 length = custom_strlen(custom_data->custom_arg_name) +
 custom_strlen(custom_ver_str) +
-custom_strlen(custom_data->custom_args[0]) + 24;
+custom_strlen(custom_data->custom_arg_name[0]) + 24;
 
 custom_error = malloc(sizeof(char) * (length + 1));
 if (custom_error == 0)
@@ -68,7 +68,7 @@ custom_strcpy(custom_error, custom_data->custom_arg_name);
 custom_strcat(custom_error, ": ");
 custom_strcat(custom_error, custom_ver_str);
 custom_strcat(custom_error, ": ");
-custom_strcat(custom_error, custom_data->custom_args[0]);
+custom_strcat(custom_error, custom_data->custom_arg_name[0]);
 custom_strcat(custom_error, ": Permission denied\n");
 custom_strcat(custom_error, "\0");
 free(custom_ver_str);
