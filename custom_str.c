@@ -1,62 +1,61 @@
 #include "shell.h"
 
 /**
- * _strdup - duplicates a string in heap memory.
- * @original_str: Type char pointer to the original string.
- * Return: duplicated string.
+ * _strdup - duplicates a str in the heap memory.
+ * @s: Type char pointer str
+ * Return: duplicated str
  */
-char *_strdup(const char *original_str)
+char *_strdup(const char *s)
 {
-char *duplicate_str;
-size_t length;
+char *new;
+size_t len;
 
-length = _strlen(original_str);
-duplicate_str = malloc(sizeof(char) * (length + 1));
-
-if (duplicate_str == NULL)
+len = _strlen(s);
+new = malloc(sizeof(char) * (len + 1));
+if (new == NULL)
 return (NULL);
-
-_cpy(duplicate_str, original_str, length + 1);
-return (duplicate_str);
+_memcpy(new, s, len + 1);
+return (new);
 }
 
 /**
- * _strlen - Returns the length of a string.
- * @str: Type char pointer to the string.
- * Return: Length of the string.
+ * _strlen - Returns the lenght of a string.
+ * @s: Type char pointer
+ * Return: Always 0.
  */
-int _strlen(const char *str)
+int _strlen(const char *s)
 {
-int length;
+int len;
 
-for (length = 0; str[length] != 0; length++)
+for (len = 0; s[len] != 0; len++)
 {
 }
-return (length);
+return (len);
 }
 
 /**
- * chars_equal - compare characters of strings
+ * cmp_chars - compare chars of strings
  * @str: input string.
  * @delim: delimiter.
- * Return: 1 if characters are equal, 0 if not.
+ *
+ * Return: 1 if are equals, 0 if not.
  */
-int chars_equal(char str[], const char *delim)
+int cmp_chars(char str[], const char *delim)
 {
-unsigned int i, j, equal_count;
+unsigned int i, j, k;
 
-for (i = 0, equal_count = 0; str[i]; i++)
+for (i = 0, k = 0; str[i]; i++)
 {
 for (j = 0; delim[j]; j++)
 {
 if (str[i] == delim[j])
 {
-equal_count++;
+k++;
 break;
 }
 }
 }
-if (i == equal_count)
+if (i == k)
 return (1);
 return (0);
 }
@@ -65,61 +64,56 @@ return (0);
  * _strtok - splits a string by some delimiter.
  * @str: input string.
  * @delim: delimiter.
- * Return: string split.
+ *
+ * Return: string splited.
  */
 char *_strtok(char str[], const char *delim)
 {
-static char *current_token, *end_of_str;
-char *token_start;
-unsigned int i, found_token;
+static char *splitted, *str_end;
+char *str_start;
+unsigned int i, bool;
 
 if (str != NULL)
 {
-if (chars_equal(str, delim))
+if (cmp_chars(str, delim))
 return (NULL);
-
-current_token = str;
+splitted = str;
 i = _strlen(str);
-end_of_str = &str[i];
+str_end = &str[i];
 }
-
-token_start = current_token;
-
-if (token_start == end_of_str)
+str_start = splitted;
+if (str_start == str_end)
 return (NULL);
 
-for (found_token = 0; *current_token; current_token++)
+for (bool = 0; *splitted; splitted++)
 {
 
-if (current_token != token_start)
-if (*current_token && *(current_token - 1) == '\0')
+if (splitted != str_start)
+if (*splitted && *(splitted - 1) == '\0')
 break;
-
 for (i = 0; delim[i]; i++)
 {
-if (*current_token == delim[i])
+if (*splitted == delim[i])
 {
-*current_token = '\0';
-if (current_token == token_start)
-token_start++;
+*splitted = '\0';
+if (splitted == str_start)
+str_start++;
 break;
 }
 }
-
-if (found_token == 0 && *current_token)
-found_token = 1;
+if (bool == 0 && *splitted)
+bool = 1;
 }
-
-if (found_token == 0)
+if (bool == 0)
 return (NULL);
-
-return (token_start);
+return (str_start);
 }
 
 /**
- * _isdigit - defines if a string passed is a number
+ * _isdigit - defines if string passed is a number
+ *
  * @s: input string
- * Return: 1 if string is a number. 0 otherwise.
+ * Return: 1 if string is a number. 0 in other case.
  */
 int _isdigit(const char *s)
 {
@@ -127,7 +121,7 @@ unsigned int i;
 
 for (i = 0; s[i]; i++)
 {
-if (s[i] < '0' || s[i] > '9')
+if (s[i] < 48 || s[i] > 57)
 return (0);
 }
 return (1);

@@ -1,78 +1,69 @@
 #include "shell.h"
 
 /**
- * custom_error_env - error message for custom_env in custom_get_env.
- * @custom_data: data relevant (counter, arguments)
+ * error_env - error message for env in get_env.
+ * @datash: data relevant (counter, arguments)
  * Return: error message.
  */
-char *custom_error_env(custom_shell_data *custom_data)
+char *error_env(data_shell *datash)
 {
 int length;
-char *custom_error;
-char *custom_ver_str;
-char *custom_msg;
+char *error;
+char *ver_str;
+char *msg;
 
-custom_ver_str = custom_aux_itoa(custom_data->custom_counter);
-custom_msg = ": Unable to add/remove from environment\n";
-length = custom_strlen(custom_data->custom_arg_name) +
-custom_strlen(custom_ver_str) + custom_strlen(custom_data->custom_arg_name[0]) +
-custom_strlen(custom_msg) + 4;
-
-custom_error = malloc(sizeof(char) * (length + 1));
-if (custom_error == 0)
+ver_str = aux_itoa(datash->counter);
+msg = ": Unable to add/remove from environment\n";
+length = _strlen(datash->av[0]) + _strlen(ver_str);
+length += _strlen(datash->args[0]) + _strlen(msg) + 4;
+error = malloc(sizeof(char) * (length + 1));
+if (error == 0)
 {
-free(custom_error);
-free(custom_ver_str);
+free(error);
+free(ver_str);
 return (NULL);
 }
 
-custom_strcpy(custom_error, custom_data->custom_arg_name);
-custom_strcat(custom_error, ": ");
-custom_strcat(custom_error, custom_ver_str);
-custom_strcat(custom_error, ": ");
-custom_strcat(custom_error, custom_data->custom_arg_name[0]);
-custom_strcat(custom_error, custom_msg);
-custom_strcat(custom_error, "\0");
-free(custom_ver_str);
+_strcpy(error, datash->av[0]);
+_strcat(error, ": ");
+_strcat(error, ver_str);
+_strcat(error, ": ");
+_strcat(error, datash->args[0]);
+_strcat(error, msg);
+_strcat(error, "\0");
+free(ver_str);
 
-return (custom_error);
+return (error);
 }
-
 /**
- * custom_error_path_126 - error message for path
- * and failure denied permission.
- * @custom_data: data relevant (counter, arguments).
+ * error_path_126 - error message for path and failure denied permission.
+ * @datash: data relevant (counter, arguments).
  *
  * Return: The error string.
  */
-char *custom_error_path_126(custom_shell_data *custom_data)
+char *error_path_126(data_shell *datash)
 {
 int length;
-char *custom_ver_str;
-char *custom_error;
+char *ver_str;
+char *error;
 
-custom_ver_str = custom_aux_itoa(custom_data->custom_counter);
-length = custom_strlen(custom_data->custom_arg_name) +
-custom_strlen(custom_ver_str) +
-custom_strlen(custom_data->custom_arg_name[0]) + 24;
-
-custom_error = malloc(sizeof(char) * (length + 1));
-if (custom_error == 0)
+ver_str = aux_itoa(datash->counter);
+length = _strlen(datash->av[0]) + _strlen(ver_str);
+length += _strlen(datash->args[0]) + 24;
+error = malloc(sizeof(char) * (length + 1));
+if (error == 0)
 {
-free(custom_error);
-free(custom_ver_str);
+free(error);
+free(ver_str);
 return (NULL);
 }
-
-custom_strcpy(custom_error, custom_data->custom_arg_name);
-custom_strcat(custom_error, ": ");
-custom_strcat(custom_error, custom_ver_str);
-custom_strcat(custom_error, ": ");
-custom_strcat(custom_error, custom_data->custom_arg_name[0]);
-custom_strcat(custom_error, ": Permission denied\n");
-custom_strcat(custom_error, "\0");
-free(custom_ver_str);
-
-return (custom_error);
+_strcpy(error, datash->av[0]);
+_strcat(error, ": ");
+_strcat(error, ver_str);
+_strcat(error, ": ");
+_strcat(error, datash->args[0]);
+_strcat(error, ": Permission denied\n");
+_strcat(error, "\0");
+free(ver_str);
+return (error);
 }
-

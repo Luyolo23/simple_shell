@@ -1,19 +1,20 @@
 #include "shell.h"
 
 /**
- * compare_variable_name - compares variable names
- * @var: name of the variable
+ * cmp_env_name - compares env variables names
+ * with the name passed.
+ * @nenv: name of the environment variable
  * @name: name passed
  *
- * Return: 0 if they are not equal. Another value if they are.
+ * Return: 0 if are not equal. Another value if they are.
  */
-int compare_variable_name(const char *var, const char *name)
+int cmp_env_name(const char *nenv, const char *name)
 {
 int i;
 
-for (i = 0; var[i] != '='; i++)
+for (i = 0; nenv[i] != '='; i++)
 {
-if (var[i] != name[i])
+if (nenv[i] != name[i])
 {
 return (0);
 }
@@ -23,51 +24,55 @@ return (i + 1);
 }
 
 /**
- * get_variable - get a variable value
- * @name: name of the variable
- * @variables: array of variables
+ * _getenv - get an environment variable
+ * @name: name of the environment variable
+ * @_environ: environment variable
  *
- * Return: value of the variable if found. Otherwise, returns NULL.
+ * Return: value of the environment variable if is found.
+ * In other case, returns NULL.
  */
-char *get_variable(const char *name, char **variables)
+char *_getenv(const char *name, char **_environ)
 {
-char *ptr_var;
+char *ptr_env;
 int i, mov;
 
-ptr_var = NULL;
+ptr_env = NULL;
 mov = 0;
-for (i = 0; variables[i]; i++)
+
+for (i = 0; _environ[i]; i++)
 {
-mov = compare_variable_name(variables[i], name);
+
+mov = cmp_env_name(_environ[i], name);
 if (mov)
 {
-ptr_var = variables[i];
+ptr_env = _environ[i];
 break;
 }
 }
 
-return (ptr_var + mov);
+return (ptr_env + mov);
 }
 
 /**
- * print_variables - prints the variables
+ * _env - prints the evironment variables
  *
- * @shell_data: data relevant.
+ * @datash: data relevant.
  * Return: 1 on success.
  */
-int print_variables(custom_shell_data *shell_data)
+int _env(data_shell *datash)
 {
 int i, j;
 
-for (i = 0; shell_data->variables[i]; i++)
+for (i = 0; datash->_environ[i]; i++)
 {
-for (j = 0; shell_data->variables[i][j]; j++)
+
+for (j = 0; datash->_environ[i][j]; j++)
 ;
 
-write(STDOUT_FILENO, shell_data->variables[i], j);
+write(STDOUT_FILENO, datash->_environ[i], j);
 write(STDOUT_FILENO, "\n", 1);
 }
-shell_data->status = 0;
+datash->status = 0;
 
 return (1);
 }

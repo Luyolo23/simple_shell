@@ -1,17 +1,17 @@
 #include "shell.h"
 
 /**
- * swap_special_chars - swaps | and & for non-printed chars
+ * swap_char - swaps | and & for non-printed chars
  *
  * @input: input string
- * @is_swapping: type of swap
+ * @bool: type of swap
  * Return: swapped string
  */
-char *swap_special_chars(char *input, int is_swapping)
+char *swap_char(char *input, int bool)
 {
 int i;
 
-if (is_swapping == 0)
+if (bool == 0)
 {
 for (i = 0; input[i]; i++)
 {
@@ -44,125 +44,124 @@ return (input);
 }
 
 /**
- * add_sep_and_commands - add separators and command lines in the lists
+ * add_nodes - add separators and command lines in the lists
  *
- * @sep_head: head of separator list
- * @cmd_head: head of command lines list
+ * @head_s: head of separator list
+ * @head_l: head of command lines list
  * @input: input string
  * Return: no return
  */
-void add_sep_and_commands(sep_list **sep_head,
-		line_list **cmd_head, char *input)
+void add_nodes(sep_list **head_s, line_list **head_l, char *input)
 {
 int i;
 char *line;
 
-input = swap_special_chars(input, 0);
+input = swap_char(input, 0);
 
 for (i = 0; input[i]; i++)
 {
 if (input[i] == ';')
-add_separator_node_end(sep_head, input[i]);
+add_sep_node_end(head_s, input[i]);
 
 if (input[i] == '|' || input[i] == '&')
 {
-add_separator_node_end(sep_head, input[i]);
+add_sep_node_end(head_s, input[i]);
 i++;
 }
 }
 
 line = _strtok(input, ";|&");
 do {
-line = swap_special_chars(line, 1);
-add_line_node_end(cmd_head, line);
+line = swap_char(line, 1);
+add_line_node_end(head_l, line);
 line = _strtok(NULL, ";|&");
 } while (line != NULL);
+
 }
 
 /**
- * move_to_next - go to the next command line stored
+ * go_next - go to the next command line stored
  *
- * @sep_list: separator list
- * @cmd_list: command line list
- * @data: data structure
+ * @list_s: separator list
+ * @list_l: command line list
+ * @datash: data structure
  * Return: no return
  */
-void move_to_next(sep_list **sep_list, line_list **cmd_list,
-		custom_shell_data *data)
+void go_next(sep_list **list_s, line_list **list_l, data_shell *datash)
 {
-sep_list *current_sep;
-line_list *current_cmd;
 int loop_sep;
+sep_list *ls_s;
+line_list *ls_l;
 
 loop_sep = 1;
-current_sep = *sep_list;
-current_cmd = *cmd_list;
+ls_s = *list_s;
+ls_l = *list_l;
 
-while (current_sep != NULL && loop_sep)
+while (ls_s != NULL && loop_sep)
 {
-if (data->status == 0)
+if (datash->status == 0)
 {
-if (current_sep->separator == '&' || current_sep->separator == ';')
+if (ls_s->separator == '&' || ls_s->separator == ';')
 loop_sep = 0;
-if (current_sep->separator == '|')
-current_cmd = current_cmd->next, current_sep = current_sep->next;
+if (ls_s->separator == '|')
+ls_l = ls_l->next, ls_s = ls_s->next;
 }
 else
 {
-if (current_sep->separator == '|' || current_sep->separator == ';')
+if (ls_s->separator == '|' || ls_s->separator == ';')
 loop_sep = 0;
-if (current_sep->separator == '&')
-current_cmd = current_cmd->next, current_sep = current_sep->next;
+if (ls_s->separator == '&')
+ls_l = ls_l->next, ls_s = ls_s->next;
 }
-if (current_sep != NULL && !loop_sep)
-current_sep = current_sep->next;
+if (ls_s != NULL && !loop_sep)
+ls_s = ls_s->next;
 }
 
-*sep_list = current_sep;
-*cmd_list = current_cmd;
+*list_s = ls_s;
+*list_l = ls_l;
 }
 
 /**
- * process_commands - splits command lines according to
+ * split_commands - splits command lines according to
  * the separators ;, | and &, and executes them
  *
- * @data: data structure
+ * @datash: data structure
  * @input: input string
  * Return: 0 to exit, 1 to continue
  */
-int process_commands(custom_shell_data *data, char *input)
+int split_commands(data_shell *datash, char *input)
 {
 
-sep_list *sep_head, *current_sep;
-line_list *cmd_head, *current_cmd;
+sep_list *head_s, *list_s;
+line_list *head_l, *list_l;
 int loop;
 
-sep_head = NULL;
-cmd_head = NULL;
+head_s = NULL;
+head_l = NULL;
 
-add_sep_and_commands(&sep_head, &cmd_head, input);
+add_nodes(&head_s, &head_l, input);
 
-current_sep = sep_head;
-current_cmd = cmd_head;
+list_s = head_s;
+list_l = head_l;
 
-while (current_cmd != NULL)
+while (list_l != NULL)
 {
-data->input = current_cmd->line;
-data->arguments = split_cmd_line(data->input);
-loop = exec_line(data);
-free(data->arguments);
+datash->input = list_l->line;
+datash->args = split_line(datash->input);
+loop = exec_line(datash);
+free(datash->args);
 
 if (loop == 0)
 break;
 
-move_to_next(&current_sep, &current_cmd, data);
+go_next(&list_s, &list_l, datash);
 
-if (current_cmd != NULL)
-current_cmd = current_cmd->next;
+if (list_l != NULL)
+list_l = list_l->next;
 }
 
-free_separator_list(&sep_head);
-free_line_list(&cmd_head);
+free_sep_list(&head_s);
+free_line_list(&head_l);
 
 if (loop == 0)
 return (0);
@@ -170,12 +169,12 @@ return (1);
 }
 
 /**
- * split_cmd_line - tokenizes the input string
+ * split_line - tokenizes the input string
  *
  * @input: input string.
  * Return: string splitted.
  */
-char **split_cmd_line(char *input)
+char **split_line(char *input)
 {
 size_t bsize;
 size_t i;
@@ -198,7 +197,7 @@ for (i = 1; token != NULL; i++)
 if (i == bsize)
 {
 bsize += TOK_BUFSIZE;
-tokens = _reallocate_dp(tokens, i, sizeof(char *) * bsize);
+tokens = _reallocdp(tokens, i, sizeof(char *) * bsize);
 if (tokens == NULL)
 {
 write(STDERR_FILENO, ": allocation error\n", 18);

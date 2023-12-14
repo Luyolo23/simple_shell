@@ -36,7 +36,7 @@ char *path, *ptr_path, *token_path, *dir;
 int len_dir, len_cmd, i;
 struct stat st;
 
-path = get_variable("PATH", _environ);
+path = _getenv("PATH", _environ);
 if (path)
 {
 ptr_path = _strdup(path);
@@ -79,7 +79,7 @@ return (NULL);
  * @datash: data structure
  * Return: 0 if is not an executable, other number if it does
  */
-int is_executable(custom_shell_data *datash)
+int is_executable(data_shell *datash)
 {
 struct stat st;
 int i;
@@ -125,7 +125,7 @@ return (-1);
  * @datash: data structure
  * Return: 1 if there is an error, 0 if not
  */
-int check_error_cmd(char *dir, custom_shell_data *datash)
+int check_error_cmd(char *dir, data_shell *datash)
 {
 if (dir == NULL)
 {
@@ -161,7 +161,7 @@ return (0);
  * @datash: data relevant (args and input)
  * Return: 1 on success.
  */
-int cmd_exec(custom_shell_data *datash)
+int cmd_exec(data_shell *datash)
 {
 pid_t pd;
 pid_t wpd;

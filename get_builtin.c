@@ -5,13 +5,13 @@
  * @cmd: command
  * Return: function pointer of the builtin command
  */
-int (*get_builtin(char *cmd))(custom_shell_data *)
+int (*get_builtin(char *cmd))(data_shell *)
 {
 builtin_t builtin[] = {
-{ "env", print_variables},
+{ "env", _env },
 { "exit", exit_shell },
-{ "setenv", _set_variable },
-{ "unsetenv", _unset_variable },
+{ "setenv", _setenv },
+{ "unsetenv", _unsetenv },
 { "cd", cd_shell },
 { "help", get_help },
 { NULL, NULL }

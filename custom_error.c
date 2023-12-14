@@ -1,154 +1,145 @@
 #include "shell.h"
 
 /**
- * custom_strcat_cd - function that concatenates the message for cd error
+ * strcat_cd - function that concatenates the message for cd error
  *
- * @custom_data: data relevant (directory)
- * @custom_msg: message to print
- * @custom_error: output message
- * @custom_ver_str: counter lines
+ * @datash: data relevant (directory)
+ * @msg: message to print
+ * @error: output message
+ * @ver_str: counter lines
  * Return: error message
  */
-char *custom_strcat_cd(custom_shell_data *custom_data, char *custom_msg,
-		char *custom_error, char *custom_ver_str)
+char *strcat_cd(data_shell *datash, char *msg, char *error, char *ver_str)
 {
-char *custom_illegal_flag;
+char *illegal_flag;
 
-custom_strcpy(custom_error, custom_data->custom_arg_name);
-custom_strcat(custom_error, ": ");
-custom_strcat(custom_error, custom_ver_str);
-custom_strcat(custom_error, ": ");
-custom_strcat(custom_error, custom_data->custom_arg_name[0]);
-custom_strcat(custom_error, custom_msg);
-
-if (custom_data->custom_arg_name[1][0] == '-')
+_strcpy(error, datash->av[0]);
+_strcat(error, ": ");
+_strcat(error, ver_str);
+_strcat(error, ": ");
+_strcat(error, datash->args[0]);
+_strcat(error, msg);
+if (datash->args[1][0] == '-')
 {
-custom_illegal_flag = malloc(3);
-custom_illegal_flag[0] = '-';
-custom_illegal_flag[1] = custom_data->custom_arg_name[1][1];
-custom_illegal_flag[2] = '\0';
-custom_strcat(custom_error, custom_illegal_flag);
-free(custom_illegal_flag);
+illegal_flag = malloc(3);
+illegal_flag[0] = '-';
+illegal_flag[1] = datash->args[1][1];
+illegal_flag[2] = '\0';
+_strcat(error, illegal_flag);
+free(illegal_flag);
 }
 else
 {
-custom_strcat(custom_error, custom_data->custom_arg_name[1]);
+_strcat(error, datash->args[1]);
 }
 
-custom_strcat(custom_error, "\n");
-custom_strcat(custom_error, "\0");
-return (custom_error);
+_strcat(error, "\n");
+_strcat(error, "\0");
+return (error);
 }
 
 /**
- * custom_error_get_cd - error message for cd command in get_cd
- * @custom_data: data relevant (directory)
+ * error_get_cd - error message for cd command in get_cd
+ * @datash: data relevant (directory)
  * Return: Error message
  */
-char *custom_error_get_cd(custom_shell_data *custom_data)
+char *error_get_cd(data_shell *datash)
 {
-int custom_length, custom_len_id;
-char *custom_error, *custom_ver_str, *custom_msg;
+int length, len_id;
+char *error, *ver_str, *msg;
 
-custom_ver_str = custom_aux_itoa(custom_data->custom_counter);
-if (custom_data->custom_arg_name[1][0] == '-')
+ver_str = aux_itoa(datash->counter);
+if (datash->args[1][0] == '-')
 {
-custom_msg = ": Illegal option ";
-custom_len_id = 2;
+msg = ": Illegal option ";
+len_id = 2;
 }
 else
 {
-custom_msg = ": can't cd to ";
-custom_len_id = custom_strlen(custom_data->custom_arg_name[1]);
+msg = ": can't cd to ";
+len_id = _strlen(datash->args[1]);
 }
 
-custom_length = custom_strlen(custom_data->custom_arg_name) +
-custom_strlen(custom_data->custom_arg_name[0]) +
-custom_strlen(custom_ver_str) + custom_strlen(custom_msg) +
-custom_len_id + 5;
+length = _strlen(datash->av[0]) + _strlen(datash->args[0]);
+length += _strlen(ver_str) + _strlen(msg) + len_id + 5;
+error = malloc(sizeof(char) * (length + 1));
 
-custom_error = malloc(sizeof(char) * (custom_length + 1));
-
-if (custom_error == 0)
+if (error == 0)
 {
-free(custom_ver_str);
+free(ver_str);
 return (NULL);
 }
 
-custom_error = custom_strcat_cd(custom_data, custom_msg, custom_error,
-		custom_ver_str);
+error = strcat_cd(datash, msg, error, ver_str);
 
-free(custom_ver_str);
+free(ver_str);
 
-return (custom_error);
+return (error);
 }
 
 /**
- * custom_error_not_found - generic error message for command not found
- * @custom_data: data relevant (counter, arguments)
+ * error_not_found - generic error message for command not found
+ * @datash: data relevant (counter, arguments)
  * Return: Error message
  */
-char *custom_error_not_found(custom_shell_data *custom_data)
+char *error_not_found(data_shell *datash)
 {
-int custom_length;
-char *custom_error;
-char *custom_ver_str;
+int length;
+char *error;
+char *ver_str;
 
-custom_ver_str = custom_aux_itoa(custom_data->custom_counter);
-custom_length = custom_strlen(custom_data->custom_arg_name) +
-	custom_strlen(custom_ver_str) +
-	custom_strlen(custom_data->custom_arg_name[0]) + 16;
-custom_error = malloc(sizeof(char) * (custom_length + 1));
-if (custom_error == 0)
+ver_str = aux_itoa(datash->counter);
+length = _strlen(datash->av[0]) + _strlen(ver_str);
+length += _strlen(datash->args[0]) + 16;
+error = malloc(sizeof(char) * (length + 1));
+if (error == 0)
 {
-free(custom_error);
-free(custom_ver_str);
+free(error);
+free(ver_str);
 return (NULL);
-}
-custom_strcpy(custom_error, custom_data->custom_arg_name);
-custom_strcat(custom_error, ": ");
-custom_strcat(custom_error, custom_ver_str);
-custom_strcat(custom_error, ": ");
-custom_strcat(custom_error, custom_data->custom_arg_name[0]);
-custom_strcat(custom_error, ": not found\n");
-custom_strcat(custom_error, "\0");
-free(custom_ver_str);
-return (custom_error);
+	}
+_strcpy(error, datash->av[0]);
+_strcat(error, ": ");
+_strcat(error, ver_str);
+_strcat(error, ": ");
+_strcat(error, datash->args[0]);
+_strcat(error, ": not found\n");
+_strcat(error, "\0");
+free(ver_str);
+return (error);
 }
 
 /**
- * custom_error_exit_shell - generic error message for exit in get_exit
- * @custom_data: data relevant (counter, arguments)
+ * error_exit_shell - generic error message for exit in get_exit
+ * @datash: data relevant (counter, arguments)
  *
  * Return: Error message
  */
-char *custom_error_exit_shell(custom_shell_data *custom_data)
+char *error_exit_shell(data_shell *datash)
 {
-int custom_length;
-char *custom_error;
-char *custom_ver_str;
+int length;
+char *error;
+char *ver_str;
 
-custom_ver_str = custom_aux_itoa(custom_data->custom_counter);
-custom_length = custom_strlen(custom_data->custom_arg_name) +
-custom_strlen(custom_ver_str) +
-custom_strlen(custom_data->custom_arg_name[0]) +
-custom_strlen(custom_data->custom_arg_name[1]) + 23;
-custom_error = malloc(sizeof(char) * (custom_length + 1));
-if (custom_error == 0)
+ver_str = aux_itoa(datash->counter);
+length = _strlen(datash->av[0]) + _strlen(ver_str);
+length += _strlen(datash->args[0]) + _strlen(datash->args[1]) + 23;
+error = malloc(sizeof(char) * (length + 1));
+if (error == 0)
 {
-free(custom_ver_str);
+free(ver_str);
 return (NULL);
 }
-custom_strcpy(custom_error, custom_data->custom_arg_name);
-custom_strcat(custom_error, ": ");
-custom_strcat(custom_error, custom_ver_str);
-custom_strcat(custom_error, ": ");
-custom_strcat(custom_error, custom_data->custom_arg_name[0]);
-custom_strcat(custom_error, ": Illegal number: ");
-custom_strcat(custom_error, custom_data->custom_arg_name[1]);
-custom_strcat(custom_error, "\n\0");
-free(custom_ver_str);
+_strcpy(error, datash->av[0]);
+_strcat(error, ": ");
+_strcat(error, ver_str);
+_strcat(error, ": ");
+_strcat(error, datash->args[0]);
+_strcat(error, ": Illegal number: ");
+_strcat(error, datash->args[1]);
+_strcat(error, "\n\0");
+free(ver_str);
 
-return (custom_error);
+return (error);
 }
 

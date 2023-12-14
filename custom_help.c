@@ -1,10 +1,10 @@
 #include "shell.h"
 
 /**
- * disp_env_help - Help information for the builtin env
+ * aux_help_env - Help information for the builtin env
  * Return: no return
  */
-void disp_env_help(void)
+void aux_help_env(void)
 {
 char *help = "env: env [option] [name=value] [command [args]]\n\t";
 
@@ -14,10 +14,10 @@ write(STDOUT_FILENO, help, _strlen(help));
 
 }
 /**
- * disp_setenv_help - Help information for the builtin setenv
+ * aux_help_setenv - Help information for the builtin setenv
  * Return: no return
  */
-void disp_setenv_help(void)
+void aux_help_setenv(void)
 {
 
 char *help = "setenv: setenv (const char *name, const char *value,";
@@ -29,10 +29,10 @@ help = "Add a new definition to the environment\n";
 write(STDOUT_FILENO, help, _strlen(help));
 }
 /**
- * disp_unsetenv_help - Help information for the builtin unsetenv
+ * aux_help_unsetenv - Help information for the builtin unsetenv
  * Return: no return
  */
-void disp_unsetenv_help(void)
+void aux_help_unsetenv(void)
 {
 char *help = "unsetenv: unsetenv (const char *name)\n\t";
 
@@ -43,10 +43,10 @@ write(STDOUT_FILENO, help, _strlen(help));
 
 
 /**
- * disp_general_help - Entry point for help information for the help builtin
+ * aux_help_general - Entry point for help information for the help builtin
  * Return: no return
  */
-void disp_general_help(void)
+void aux_help_general(void)
 {
 char *help = "^-^ bash, version 1.0(1)-release\n";
 
@@ -65,10 +65,10 @@ help = "unsetenv [variable]\n";
 write(STDOUT_FILENO, help, _strlen(help));
 }
 /**
- * disp_exit_help - Help information fot the builint exit
+ * aux_help_exit - Help information fot the builint exit
  * Return: no return
  */
-void disp_exit_help(void)
+void aux_help_exit(void)
 {
 char *help = "exit: exit [n]\n Exit shell.\n";
 

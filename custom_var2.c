@@ -1,128 +1,129 @@
 #include "shell.h"
 
 /**
- * duplicate_info - duplicates information to create
- * a new variable or setting
- * @name: name (variable or setting)
- * @value: value (variable or setting)
+ * copy_info - copies info to create
+ * a new env or alias
+ * @name: name (env or alias)
+ * @value: value (env or alias)
  *
- * Return: new variable or setting.
+ * Return: new env or alias.
  */
-char *duplicate_info(char *name, char *value)
+char *copy_info(char *name, char *value)
 {
-char *new_info;
+char *new;
 int len_name, len_value, len;
 
 len_name = _strlen(name);
 len_value = _strlen(value);
 len = len_name + len_value + 2;
-new_info = malloc(sizeof(char) * (len));
-_strcpy(new_info, name);
-_strcat(new_info, "=");
-_strcat(new_info, value);
-_strcat(new_info, "\0");
+new = malloc(sizeof(char) * (len));
+_strcpy(new, name);
+_strcat(new, "=");
+_strcat(new, value);
+_strcat(new, "\0");
 
-return (new_info);
+return (new);
 }
 
 /**
- * set_variable - sets a variable or setting
+ * set_env - sets an environment variable
  *
- * @name: name of the variable or setting
- * @value: value of the variable or setting
- * @shell_data: data structure (variables or settings)
+ * @name: name of the environment variable
+ * @value: value of the environment variable
+ * @datash: data structure (environ)
  * Return: no return
  */
-void set_variable(char *name, char *value, custom_shell_data *shell_data)
+void set_env(char *name, char *value, data_shell *datash)
 {
 int i;
-char *var_info, *name_info;
+char *var_env, *name_env;
 
-for (i = 0; shell_data->_variables[i]; i++)
+for (i = 0; datash->_environ[i]; i++)
 {
-var_info = _strdup(shell_data->_variables[i]);
-name_info = _strtok(var_info, "=");
-if (_strcmp(name_info, name) == 0)
+var_env = _strdup(datash->_environ[i]);
+name_env = _strtok(var_env, "=");
+if (_strcmp(name_env, name) == 0)
 {
-free(shell_data->_variables[i]);
-shell_data->_variables[i] = duplicate_info(name_info, value);
-free(var_info);
+free(datash->_environ[i]);
+datash->_environ[i] = copy_info(name_env, value);
+free(var_env);
 return;
 }
-free(var_info);
+free(var_env);
 }
 
-shell_data->_variables = _reallocate_dp
-(shell_data->_variables, i, sizeof(char *) * (i + 2));
-shell_data->_variables[i] = duplicate_info(name, value);
-shell_data->_variables[i + 1] = NULL;
-}
-
-/**
- * _set_variable - compares variable names and sets a new variable or setting
- * @shell_data: data relevant (variable name and variable value)
- *
- * Return: 1 on success.
- */
-int _set_variable(custom_shell_data *shell_data)
-{
-if (shell_data->args[1] == NULL || shell_data->args[2] == NULL)
-{
-get_error(shell_data, -1);
-return (1);
-}
-
-set_variable(shell_data->args[1], shell_data->args[2], shell_data);
-
-return (1);
+datash->_environ = _reallocdp(datash->_environ, i, sizeof(char *) * (i + 2));
+datash->_environ[i] = copy_info(name, value);
+datash->_environ[i + 1] = NULL;
 }
 
 /**
- * _unset_variable - deletes a variable or setting
- *
- * @shell_data: data relevant (variable name)
+ * _setenv - compares env variables names
+ * with the name passed.
+ * @datash: data relevant (env name and env value)
  *
  * Return: 1 on success.
  */
-int _unset_variable(custom_shell_data *shell_data)
+int _setenv(data_shell *datash)
 {
-char **realloc_variables;
-char *var_info, *name_info;
+
+if (datash->args[1] == NULL || datash->args[2] == NULL)
+{
+get_error(datash, -1);
+return (1);
+}
+
+set_env(datash->args[1], datash->args[2], datash);
+
+return (1);
+}
+
+/**
+ * _unsetenv - deletes a environment variable
+ *
+ * @datash: data relevant (env name)
+ *
+ * Return: 1 on success.
+ */
+int _unsetenv(data_shell *datash)
+{
+char **realloc_environ;
+char *var_env, *name_env;
 int i, j, k;
 
-if (shell_data->args[1] == NULL)
+if (datash->args[1] == NULL)
 {
-get_error(shell_data, -1);
+get_error(datash, -1);
 return (1);
 }
 k = -1;
-for (i = 0; shell_data->_variables[i]; i++)
+for (i = 0; datash->_environ[i]; i++)
 {
-var_info = _strdup(shell_data->_variables[i]);
-name_info = _strtok(var_info, "=");
-if (_strcmp(name_info, shell_data->args[1]) == 0)
+var_env = _strdup(datash->_environ[i]);
+name_env = _strtok(var_env, "=");
+if (_strcmp(name_env, datash->args[1]) == 0)
 {
 k = i;
 }
-free(var_info);
+free(var_env);
 }
 if (k == -1)
 {
-get_error(shell_data, -1);
+get_error(datash, -1);
 return (1);
 }
-realloc_variables = malloc(sizeof(char *) * (i));
-for (i = j = 0; shell_data->_variables[i]; i++)
+realloc_environ = malloc(sizeof(char *) * (i));
+for (i = j = 0; datash->_environ[i]; i++)
 {
 if (i != k)
 {
-realloc_variables[j] = shell_data->_variables[i];
+realloc_environ[j] = datash->_environ[i];
 j++;
 }
 }
-realloc_variables[j] = NULL;
-free(shell_data->_variables[k]);
-free(shell_data->_variables);
-shell_data->_variables = realloc_variables;
+realloc_environ[j] = NULL;
+free(datash->_environ[k]);
+free(datash->_environ);
+datash->_environ = realloc_environ;
 return (1);
 }

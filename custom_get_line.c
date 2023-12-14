@@ -10,28 +10,28 @@
 void bring_line(char **lineptr, size_t *n, char *buffer, size_t j)
 {
 
-	if (*lineptr == NULL)
-	{
-		if  (j > BUFSIZE)
-			*n = j;
+if (*lineptr == NULL)
+{
+if  (j > BUFSIZE)
+*n = j;
 
-		else
-			*n = BUFSIZE;
-		*lineptr = buffer;
-	}
-	else if (*n < j)
-	{
-		if (j > BUFSIZE)
-			*n = j;
-		else
-			*n = BUFSIZE;
-		*lineptr = buffer;
-	}
-	else
-	{
-		_strcpy(*lineptr, buffer);
-		free(buffer);
-	}
+else
+*n = BUFSIZE;
+*lineptr = buffer;
+}
+else if (*n < j)
+{
+if (j > BUFSIZE)
+*n = j;
+else
+*n = BUFSIZE;
+*lineptr = buffer;
+}
+else
+{
+_strcpy(*lineptr, buffer);
+free(buffer);
+}
 }
 /**
  * get_line - Read input from stream
@@ -71,7 +71,7 @@ input++;
 break;
 }
 if (input >= BUFSIZE)
-buffer = _reallocate(buffer, input, input + 1);
+buffer = _realloc(buffer, input, input + 1);
 buffer[input] = t;
 input++;
 }

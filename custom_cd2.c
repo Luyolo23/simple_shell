@@ -2,15 +2,15 @@
 
 /**
  * cd_shell - changes the current directory
- * @data: data relevant
+ * @datash: data relevant
  * Return: 1 on success
  */
-int cd_shell(custom_shell_data *data)
+int cd_shell(data_shell *datash)
 {
 char *dir;
 int is_home, is_home2, is_ddash;
 
-dir = data->args[1];
+dir = datash->args[1];
 
 if (dir != NULL)
 {
@@ -21,23 +21,23 @@ is_ddash = _strcmp("--", dir);
 
 if (dir == NULL || !is_home || !is_home2 || !is_ddash)
 {
-cd_home(data);
+cd_to_home(datash);
 return (1);
 }
 
 if (_strcmp("-", dir) == 0)
 {
-cd_prev(data);
+cd_previous(datash);
 return (1);
 }
 
 if (_strcmp(".", dir) == 0 || _strcmp("..", dir) == 0)
 {
-cd_parent(data);
+cd_dot(datash);
 return (1);
 }
 
-cd_to_dir(data);
+cd_to(datash);
 
 return (1);
 }

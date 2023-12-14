@@ -28,7 +28,7 @@ up_to = i;
 
 if (up_to != 0)
 {
-in = _reallocate(in, i, up_to + 1);
+in = _realloc(in, i, up_to + 1);
 in[up_to] = '\0';
 }
 
@@ -41,7 +41,7 @@ return (in);
  *
  * Return: no return.
  */
-void shell_loop(custom_shell_data *datash)
+void shell_loop(data_shell *datash)
 {
 int loop, i_eof;
 char *input;
@@ -63,8 +63,8 @@ datash->status = 2;
 free(input);
 continue;
 }
-input = replace_variables(input, datash);
-loop = process_commands(datash, input);
+input = rep_var(input, datash);
+loop = split_commands(datash, input);
 datash->counter += 1;
 free(input);
 }
