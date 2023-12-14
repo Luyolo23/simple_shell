@@ -80,17 +80,17 @@ return (0);
  * @datash: data structure
  * @input: input string
  * @index: index of the error
- * @bool: control flag
+ * @_bool: control flag
  * Return: no return
  */
 void print_syntax_error_msg(custom_shell_data *datash,
-		char *input, int index, int bool)
+		char *input, int index, int _bool)
 {
 char *msg, *msg2, *msg3, *error, *counter;
 int length;
 
 if (input[index] == ';')
-msg = (bool == 0) ? (input[index + 1] == ';') ? ";;" : ";" :
+msg = (_bool == 0) ? (input[index + 1] == ';') ? ";;" : ";" :
 (input[index - 1] == ';') ? ";;" : ";";
 
 if (input[index] == '|')
@@ -101,7 +101,7 @@ msg = (input[index + 1] == '&') ? "&&" : "&";
 
 msg2 = ": Syntax error: \"";
 msg3 = "\" unexpected\n";
-counter = int_to_str(datash->counter);
+counter = int_to_str(datash->custom_counter);
 length = _strlen(datash->av[0]) + _strlen(counter) + _strlen(msg) +
 _strlen(msg2) + _strlen(msg3) + 2;
 

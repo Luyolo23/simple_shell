@@ -30,7 +30,7 @@ extern char **environ;
  * @status: last status of the shell
  * @variables: Array of strings for shell variables
  * @custom_arg_name: name of the arguments
- * @counter: lines counter
+ * @custom_counter: lines counter
  * @environment: environment variable
  * @process_id: process ID of the shell
  * @_variables: array of variables
@@ -47,7 +47,7 @@ char **arguments;
 char *input;
 char **args;
 int status;
-int counter;
+int custom_counter;
 char ***variables;
 
 } custom_shell_data;
@@ -149,6 +149,9 @@ void free_separator_list(sep_list **head);
 line_list *add_line_node_end(line_list **head, char *command_line);
 void free_line_list(line_list **head);
 
+/* get_builtin */
+int (*get_builtin(char *cmd))(custom_shell_data *);
+
 /*cmd_exec*/
 int is_cdir(char *path, int *i);
 char *_which(char *cmd, char **_environ);
@@ -178,6 +181,11 @@ char *custom_strcat(char *dest, const char *src);
 char *custom_error_env(custom_shell_data *custom_data);
 char *custom_error_path_126(custom_shell_data *custom_data);
 
+/* main */
+void free_data(custom_shell_data *datash);
+void set_data(custom_shell_data *datash, char **av);
+int main(int ac, char **av);
+
 /* custom_mem */
 void _cpy(void *dest, const void *src, unsigned int size);
 void *_reallocate(void *ptr, unsigned int old, unsigned int new);
@@ -188,6 +196,9 @@ void cd_parent(custom_shell_data *data);
 void cd_to_dir(custom_shell_data *data);
 void cd_prev(custom_shell_data *data);
 void cd_home(custom_shell_data *data);
+
+/* get_help */
+int get_help(custom_shell_data *datash);
 
 /* custom_get_error */
 int get_error(custom_shell_data *custom_data, int eval);
@@ -209,8 +220,7 @@ void rev_string(char *s);
 int count_repeated(char *input, int i);
 int find_syntax_error(char *input, int i, char last);
 int find_first_char_index(char *input, int *index);
-void print_syntax_error_msg(custom_shell_data *datash,
-		char *input, int index, int bool);
+void print_syntax_error_msg(custom_shell_data *datash, char *input, int index, int _bool);
 int check_syntax_error(custom_shell_data *datash, char *input);
 
 /* custom_var */
