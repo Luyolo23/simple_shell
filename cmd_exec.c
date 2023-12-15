@@ -76,16 +76,16 @@ return (NULL);
 /**
  * is_executable - determines if is an executable
  *
- * @datash: data structure
+ * @data: data structure
  * Return: 0 if is not an executable, other number if it does
  */
-int is_executable(data_shell *datash)
+int is_executable(data_shell *data)
 {
 struct stat st;
 int i;
 char *input;
 
-input = datash->args[0];
+input = data->arguments[0];
 for (i = 0; input[i]; i++)
 {
 if (input[i] == '.')
@@ -114,7 +114,7 @@ if (stat(input + i, &st) == 0)
 {
 return (i);
 }
-get_error(datash, 127);
+get_error(data, 127);
 return (-1);
 }
 
@@ -122,22 +122,22 @@ return (-1);
  * check_error_cmd - verifies if user has permissions to access
  *
  * @dir: destination directory
- * @datash: data structure
+ * @data: data structure
  * Return: 1 if there is an error, 0 if not
  */
-int check_error_cmd(char *dir, data_shell *datash)
+int check_error_cmd(char *dir, data_shell *data)
 {
 if (dir == NULL)
 {
-get_error(datash, 127);
+get_error(data, 127);
 return (1);
 }
 
-if (_strcmp(datash->args[0], dir) != 0)
+if (_strcmp(data->arguments[0], dir) != 0)
 {
 if (access(dir, X_OK) == -1)
 {
-get_error(datash, 126);
+get_error(data, 126);
 free(dir);
 return (1);
 }
@@ -145,9 +145,9 @@ free(dir);
 }
 else
 {
-if (access(datash->args[0], X_OK) == -1)
+if (access(data->arguments[0], X_OK) == -1)
 {
-get_error(datash, 126);
+get_error(data, 126);
 return (1);
 }
 }
@@ -158,10 +158,10 @@ return (0);
 /**
  * cmd_exec - executes command lines
  *
- * @datash: data relevant (args and input)
+ * @data: data relevant (args and input)
  * Return: 1 on success.
  */
-int cmd_exec(data_shell *datash)
+int cmd_exec(data_shell *data)
 {
 pid_t pd;
 pid_t wpd;
@@ -170,13 +170,13 @@ int exec;
 char *dir;
 (void) wpd;
 
-exec = is_executable(datash);
+exec = is_executable(data);
 if (exec == -1)
 return (1);
 if (exec == 0)
 {
-dir = _which(datash->args[0], datash->_environ);
-if (check_error_cmd(dir, datash) == 1)
+dir = _which(data->arguments[0], data->_environ);
+if (check_error_cmd(dir, data) == 1)
 return (1);
 }
 
@@ -184,14 +184,14 @@ pd = fork();
 if (pd == 0)
 {
 if (exec == 0)
-dir = _which(datash->args[0], datash->_environ);
+dir = _which(data->arguments[0], data->_environ);
 else
-dir = datash->args[0];
-execve(dir + exec, datash->args, datash->_environ);
+dir = data->arguments[0];
+execve(dir + exec, data->arguments, data->_environ);
 }
 else if (pd < 0)
 {
-perror(datash->av[0]);
+perror(data->av[0]);
 return (1);
 }
 else
@@ -201,6 +201,6 @@ wpd = waitpid(pd, &state, WUNTRACED);
 } while (!WIFEXITED(state) && !WIFSIGNALED(state));
 }
 
-datash->status = state / 256;
+data->status = state / 256;
 return (1);
 }

@@ -85,7 +85,6 @@ return (i);
 
 /**
  * replaced_input - replaces string into variables
- *
  * @head: head of the linked list
  * @input: input string
  * @new_input: new input string (replaced)
@@ -139,19 +138,19 @@ return (new_input);
  * rep_var - calls functions to replace string into vars
  *
  * @input: input string
- * @datash: data structure
+ * @data: data structure
  * Return: replaced string
  */
-char *rep_var(char *input, data_shell *datash)
+char *rep_var(char *input, data_shell *data)
 {
 r_var *head, *indx;
 char *status, *new_input;
 int olen, nlen;
 
-status = aux_itoa(datash->status);
+status = custom_itoa(data->status);
 head = NULL;
 
-olen = check_vars(&head, input, status, datash);
+olen = check_vars(&head, input, status, data);
 
 if (head == NULL)
 {

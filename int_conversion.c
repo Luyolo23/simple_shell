@@ -1,18 +1,18 @@
 #include "shell.h"
 
 /**
- * get_len - Get the lenght of a number.
+ * get_len - Get the length of a number.
  * @n: type int number.
- * Return: Lenght of a number.
+ * Return: length of a number.
  */
 int get_len(int n)
 {
 unsigned int n1;
-int lenght = 1;
+int length = 1;
 
 if (n < 0)
 {
-lenght++;
+length++;
 n1 = n * -1;
 }
 else
@@ -21,28 +21,28 @@ n1 = n;
 }
 while (n1 > 9)
 {
-lenght++;
+length++;
 n1 = n1 / 10;
 }
 
-return (lenght);
+return (length);
 }
 /**
- * aux_itoa - function converts int to string.
+ * custom_itoa - converts int to string.
  * @n: type int number
  * Return: String.
  */
-char *aux_itoa(int n)
+char *custom_itoa(int n)
 {
 unsigned int n1;
-int lenght = get_len(n);
+int length = get_len(n);
 char *buffer;
 
-buffer = malloc(sizeof(char) * (lenght + 1));
+buffer = malloc(sizeof(char) * (length + 1));
 if (buffer == 0)
 return (NULL);
 
-*(buffer + lenght) = '\0';
+*(buffer + length) = '\0';
 
 if (n < 0)
 {
@@ -54,11 +54,11 @@ else
 n1 = n;
 }
 
-lenght--;
+length--;
 do {
-*(buffer + lenght) = (n1 % 10) + '0';
+*(buffer + length) = (n1 % 10) + '0';
 n1 = n1 / 10;
-lenght--;
+length--;
 }
 while (n1 > 0)
 ;
@@ -96,5 +96,5 @@ for (i = count - size; i < count; i++)
 oi = oi + ((*(s + i) - 48) * m);
 m /= 10;
 }
-return (oi * pn);
+return (oi *pn);
 }
